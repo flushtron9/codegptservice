@@ -1,8 +1,6 @@
 package com.wimthackathon.codegptservice.service;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
 import java.util.Scanner;
 
 import org.apache.http.HttpResponse;
@@ -15,11 +13,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class StockInfoService {
 	
-	public String getStockInfo(String symbol) {
+	public String getStockInfo(String symbol) throws IOException {
 		String result = null;
 		CloseableHttpClient httpclient = HttpClients.createDefault();
-//		HttpGet httpget = new HttpGet("https://query1.finance.yahoo.com/v7/finance/options/" + symbol);
-		HttpGet httpget = new HttpGet("https://query1.finance.yahoo.com/v8/finance/chart/" + symbol);
+		HttpGet httpget = new HttpGet("https://query1.finance.yahoo.com/v7/finance/options/" + symbol);
+		//HttpGet httpget = new HttpGet("https://query1.finance.yahoo.com/v8/finance/chart/" + symbol);
 		HttpResponse httpresponse;
 		try {
 			httpresponse = httpclient.execute(httpget);
@@ -32,15 +30,13 @@ public class StockInfoService {
 			System.out.println(result);
 			result = result.replaceAll("<[^>]*>", "");
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
+			throw e;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
+			throw e;
 		}
-
 		return result;
-//		return "";
 	}
 
 }

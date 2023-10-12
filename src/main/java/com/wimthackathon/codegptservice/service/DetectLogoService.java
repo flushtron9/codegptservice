@@ -1,4 +1,11 @@
-package com.wimthackathon.codegptservice.util;
+package com.wimthackathon.codegptservice.service;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.cloud.vision.v1.AnnotateImageRequest;
 import com.google.cloud.vision.v1.AnnotateImageResponse;
@@ -8,24 +15,16 @@ import com.google.cloud.vision.v1.Feature;
 import com.google.cloud.vision.v1.Image;
 import com.google.cloud.vision.v1.ImageAnnotatorClient;
 import com.google.protobuf.ByteString;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-public class DetectLogos {
-	  public static void main(String[] args) throws IOException {
-	    // TODO(developer): Replace these variables before running the sample.
-	    String filePath = "wellsv.jpg";
-	    detectLogos(filePath);
-	  }
+@Service
+public class DetectLogoService {
 
-	  // Detects logos in the specified local image.
+	  public String detectLogo(MultipartFile file) throws IOException {
+	    String result = null;
 
-	  public static void detectLogos(String filePath) throws IOException {
-	    List<AnnotateImageRequest> requests = new ArrayList<>();
+		List<AnnotateImageRequest> requests = new ArrayList<>();
 
-	    ByteString imgBytes = ByteString.readFrom(new FileInputStream(filePath));
+	    ByteString imgBytes = ByteString.readFrom(file.getInputStream());
 
 	    Image img = Image.newBuilder().setContent(imgBytes).build();
 	    Feature feat = Feature.newBuilder().setType(Feature.Type.LOGO_DETECTION).build();
@@ -43,14 +42,16 @@ public class DetectLogos {
 	      for (AnnotateImageResponse res : responses) {
 	        if (res.hasError()) {
 	          System.out.format("Error: %s%n", res.getError().getMessage());
-	          return;
+	          throw new RuntimeException(res.getError().getMessage());
 	        }
 
 	        // For full list of available annotations, see http://g.co/cloud/vision/docs
 	        for (EntityAnnotation annotation : res.getLogoAnnotationsList()) {
 	          System.out.println(annotation.getDescription());
+	          result = annotation.getDescription();
 	        }
 	      }
 	    }
+	    return result;
 	  }
 	}

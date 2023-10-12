@@ -23,6 +23,7 @@ dependencies {
 	implementation 'org.springframework:spring-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+	implementation 'org.apache.commons:commons-text:1.10.0'
 }
 
 dependencyManagement {
