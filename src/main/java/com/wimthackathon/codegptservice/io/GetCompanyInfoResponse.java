@@ -6,6 +6,14 @@ public class GetCompanyInfoResponse {
 	
 	private List<Error> errors;
 	private String data;
+	private String chartInfo;
+	
+	public String getChartInfo() {
+		return chartInfo;
+	}
+	public void setChartInfo(String chartInfo) {
+		this.chartInfo = chartInfo;
+	}
 	public List<Error> getErrors() {
 		return errors;
 	}

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,7 +30,7 @@ public class CodeGPTController {
 	
 	@Autowired
 	DetectLogoService detectLogoService;
-	
+	@CrossOrigin(origins = "http://localhost:4200")
 	@RequestMapping(value="/getCompanyInfo", method = RequestMethod.POST, produces = {"application/json"}, 
 			consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
 	public @ResponseBody ResponseEntity<GetCompanyInfoResponse> getCompanyInfo(@RequestParam("file") MultipartFile image) {
@@ -49,6 +50,8 @@ public class CodeGPTController {
 			}
 			String stockInformation = stockInfoService.getStockInfo(ticker);
 			response.setData(stockInformation);
+			String tickerInfo = stockInfoService.getChartInfo(ticker);
+			response.setChartInfo(tickerInfo);
 		} catch (Exception e) {
 			Error error = new Error();
 			error.setMessage(e.getMessage());
