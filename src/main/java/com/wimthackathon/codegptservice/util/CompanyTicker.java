@@ -4,7 +4,9 @@ import org.apache.commons.text.similarity.JaroWinklerDistance;
 
 public enum CompanyTicker {
     WELLSFARGO("wellsfargo", "WFC"),
-    COCOCOLA("cocacola", "KO");
+    COCOCOLA("cocacola", "KO"),
+    TESLA("teslainc","TSLA"),
+    COSTCO("costco","COST");
 
     private final String company; 
     private final String ticker;
