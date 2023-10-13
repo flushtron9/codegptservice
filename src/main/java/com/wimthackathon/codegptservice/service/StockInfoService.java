@@ -17,7 +17,7 @@ public class StockInfoService {
 		String result = null;
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 		HttpGet httpget = new HttpGet("https://query1.finance.yahoo.com/v7/finance/options/" + symbol);
-		//HttpGet httpget = new HttpGet("https://query1.finance.yahoo.com/v8/finance/chart/" + symbol);
+		//HttpGet httpget1 = new HttpGet("https://query1.finance.yahoo.com/v8/finance/chart/" + symbol);
 		HttpResponse httpresponse;
 		try {
 			httpresponse = httpclient.execute(httpget);
@@ -27,6 +27,34 @@ public class StockInfoService {
 				sb.append(sc.next());
 			}
 			result = sb.toString();
+			System.out.println(result);
+			result = result.replaceAll("<[^>]*>", "");
+			
+			
+		} catch (ClientProtocolException e) {
+			System.out.println(e.getMessage());
+			throw e;
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			throw e;
+		}
+		return result;
+	}
+	
+	public String getChartInfo(String symbol) throws IOException {
+		String result = null;
+		CloseableHttpClient httpclient = HttpClients.createDefault();
+		HttpGet httpget1 = new HttpGet("https://query1.finance.yahoo.com/v8/finance/chart/" + symbol);
+		HttpResponse httpresponse;
+		try {
+			
+			httpresponse = httpclient.execute(httpget1);
+			Scanner sc1 = new Scanner(httpresponse.getEntity().getContent());
+			StringBuffer sb1 = new StringBuffer();
+			while (sc1.hasNext()) {
+				sb1.append(sc1.next());
+			}
+			result = sb1.toString();
 			System.out.println(result);
 			result = result.replaceAll("<[^>]*>", "");
 		} catch (ClientProtocolException e) {
